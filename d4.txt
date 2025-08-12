@@ -1,0 +1,95 @@
+1.
+
+select teachers.name, surname, groups.name
+from teachers, groups, groupslectures, lectures
+where lectures.teacherid = teachers.id 
+and groupslectures.groupid = groups.id 
+and groupslectures.lectureid = lectures.id;
+
+2. не получилось
+
+select faculties.name,
+departments.name,
+faculties.financing,
+departments.financing 
+from faculties, departments
+where faculties.financing < departments.financing 
+and departments.facultyid = faculties.id;
+	   
+3.
+
+select curators.surname, groups.name
+from curators, groups, groupscurators
+where groupscurators.curatorid = curators.id 
+and  groupscurators.groupid = groups.id;
+
+4.
+select teachers.name, teachers.surname, groups.name
+from teachers, lectures, groupslectures, groups
+where lectures.teacherid = teachers.id 
+and groupslectures.groupid = groups.id 
+and groupslectures.lectureid = lectures.id
+and  groups.name = 'ФК123';
+
+5.
+
+select teachers.surname, faculties.name
+from teachers, faculties, lectures, groupslectures, groups, departments
+where lectures.teacherid = teachers.id 
+and groupslectures.lectureid = lectures.id
+and groupslectures.groupid = groups.id
+and groups.departmentid = departments.id
+and departments.facultyid = faculties.id;
+
+6. 
+
+select departments.name as Кафедра, groups.name as Группа
+from departments, groups
+where groups.departmentid = departments.id;
+
+7.
+
+select teachers.surname, teachers.name, subjects.name
+from teachers, subjects, lectures
+where lectures.teacherid = teachers.id
+and lectures.subjectid = subjects.id
+and teachers.surname = 'Гусев'
+and teachers.name = 'Виктор';
+
+8.
+
+select departments.name as Кафедра, subjects.name as Дисциплина
+from departments, groups, groupslectures, lectures, subjects
+where lectures.subjectid = subjects.id
+and groupslectures.lectureid = lectures.id
+and groupslectures.groupid = groups.id
+and groups.departmentid = departments.id
+and subjects.name = 'Мировая экономика';
+
+9.
+
+select groups.name as Группа, faculties.name as Факультет
+from groups, departments, faculties
+where groups.departmentid = departments.id
+and departments.facultyid = faculties.id
+and faculties.name = 'Экономический';
+
+10.
+
+select groups.name as Групаа, groups.year as Курс, faculties.name as Факультет
+from groups, faculties, departments
+where groups.departmentid = departments.id
+and departments.facultyid = faculties.id
+and groups.year = '5';
+
+11.
+
+select teachers.name, teachers.surname, subjects.name, lectures.lectureroom
+from subjects, lectures, teachers
+where lectures.subjectid = subjects.id
+and lectures.teacherid = teachers.id
+and lectures.lectureroom = 'K105';
+
+
+
+	   
