@@ -1,0 +1,139 @@
+-- CREATE TABLE Students
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- name text,
+
+-- PRIMARY KEY(id)
+-- );
+
+-- INSERT INTO Students (name) VALUES
+-- ('Смирнова Д.Ю.'),
+-- ('Гусева Т.С.'),
+-- ('Максимов О.Ю.'),
+-- ('Петров Н.С');
+-- select * from students;
+
+-- CREATE TABLE Groups
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- name text,
+-- studentid uuid,
+
+-- PRIMARY KEY(id),
+-- FOREIGN KEY (studentid) REFERENCES students(id)
+-- ON UPDATE CASCADE
+-- ON DELETE CASCADE
+-- );
+-- select * from Groups;
+
+-- INSERT INTO groups (name,studentid) VALUES
+-- ('Б12', '1136111d-498f-487c-8fa8-feda7b3ea832'),
+-- ('Б12', '7b03ce1e-42b3-4772-87d6-61021d0951b5'),
+-- ('Г14', '2c11a6c6-6a56-464d-bd1a-4cd7416a87f7'),
+-- ('Г14', '65aa254f-e9bb-4c27-bb35-a8f96d8433d1');
+
+-- CREATE TABLE Teachers 
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- name text,
+-- PRIMARY KEY(id)
+-- );
+
+-- INSERT INTO teachers (name) VALUES
+-- ('Осипова С.В.'),
+-- ('Комаров Д.П.'),
+-- ('Иванов А.С');
+-- select * from teachers;
+
+-- CREATE TABLE Time
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- day text,
+-- start real,
+-- finish real,
+-- PRIMARY KEY(id)
+-- );
+
+-- INSERT INTO time (day, start, finish) VALUES
+-- ('Понедельник', '9.00', '10.30'),
+-- ('Вторник', '10.45', '12.15'),
+-- ('Среда', '12.30', '14.00'),
+-- ('Четверг', '14.15', '15.45');
+-- select * from time;
+
+-- CREATE TABLE Subjects
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- name text,
+-- timeid uuid,
+-- PRIMARY KEY(id),
+-- FOREIGN KEY (timeid) REFERENCES time(id)
+--  ON UPDATE CASCADE
+--  ON DELETE CASCADE
+-- );
+
+-- INSERT INTO subjects (name, timeid) VALUES
+-- ('Экономика', '1987e944-918f-4b76-b085-c7fd4ee12017'),
+-- ('Английский', '3242c1e5-19c1-464c-b2c6-a176be195147'),
+-- ('Философия', '6321aeda-32bd-4817-9866-0736dac6d63a'),
+-- ('История', '8373effa-cb09-4cdf-942d-51b6b4eb8bb6');
+-- select * from subjects;
+
+-- CREATE TABLE lectures
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- lectureroom text,
+-- subjectid uuid,
+-- teacherid uuid,
+-- PRIMARY KEY(id),
+-- FOREIGN KEY (subjectid) REFERENCES subjects(id)
+-- ON UPDATE CASCADE
+-- ON DELETE CASCADE,
+-- FOREIGN KEY (teacherid) REFERENCES teachers(id)
+-- ON UPDATE CASCADE
+-- ON DELETE CASCADE
+-- );
+
+-- INSERT INTO lectures (lectureroom, subjectid, teacherid) VALUES
+-- ('К102', '5d974f7b-1ed1-4614-ac38-f33b3d856d50', '5e25006d-16e0-4d8a-896a-d07776ce93de'),
+-- ('Т112', 'c2eb0ec9-e18a-4cff-aa30-a2e4821ce70a', '674af68d-9888-4dd5-9dfa-296a236bf064'),
+-- ('У142', 'cd056fa4-65e5-4d85-b4de-e61070d14430', '951dbc56-21e7-4b81-9a79-a347aaf9f080'),
+-- ('А105', 'd6e3c9ef-c095-442e-8997-19d2f7006007', '5e25006d-16e0-4d8a-896a-d07776ce93de');
+-- select * from lectures;
+
+-- CREATE TABLE Groupslectures 
+-- (
+-- id uuid DEFAULT gen_random_uuid(),
+-- groupid uuid,
+-- lectureid uuid,
+--  PRIMARY KEY(id),
+-- FOREIGN KEY (groupid) REFERENCES groups(id)
+-- ON UPDATE CASCADE
+-- ON DELETE CASCADE,
+-- FOREIGN KEY (lectureid) REFERENCES lectures(id)
+-- ON UPDATE CASCADE
+-- ON DELETE CASCADE
+-- );
+
+-- INSERT INTO Groupslectures (groupid, lectureid) VALUES
+-- ('0889741a-b4d3-4394-a767-0a6d4fe1de05', '34232c3e-9cb2-4e48-9b0f-5eb9a96cd654'),
+-- ('c978135d-b5bb-4657-80e7-1b8b4349620e', '57685642-135a-4f2c-8a89-611dca2c4742'),
+-- ('e748ce5b-ba6c-45e3-9e2f-5889ef669d5d', 'bb11d613-2e55-4be5-826f-2a0b4f609c2e'),
+-- ('f745a0aa-f7ae-4d0f-9607-d927fd8db31f', 'd3ba2a4f-e156-4786-a1fc-c4d2eae61550'),
+-- ('f745a0aa-f7ae-4d0f-9607-d927fd8db31f', '34232c3e-9cb2-4e48-9b0f-5eb9a96cd654');
+-- select * from Groupslectures;
+
+select students.id, students.name as студент, day as День, 
+subjects.name as Предмет, start as Начало, 
+finish as Конец, lectureroom as Аудитория,
+teachers.name as преподаватель
+from students, groups, time, subjects, teachers, lectures, groupslectures
+where subjects.timeid = time.id
+and lectures.subjectid = subjects.id
+and lectures.teacherid = teachers.id
+and groupslectures.lectureid = lectures.id
+and groupslectures.groupid = groups.id
+and groups.studentid = students.id
+and students.name = 'Максимов О.Ю.';
+
+
